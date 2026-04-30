@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการร้าน - ก้องล้อซิ่ง ชลบุรี</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-main text-white min-h-screen">
+    <header id="global-header"></header>
+
+    <main class="container mx-auto px-4 py-8 relative">
+        <!-- Admin Login -->
+        <div id="admin-login" class="max-w-md mx-auto bg-[#111] p-8 rounded-lg border border-red-900 mt-12 text-center">
+            <h2 class="text-2xl font-bold mb-6 text-red-main">เข้าสู่ระบบจัดการร้าน</h2>
+            <input type="text" id="admin-user" placeholder="Username" class="w-full px-4 py-2 rounded mb-4">
+            <input type="password" id="admin-pass" placeholder="Password" class="w-full px-4 py-2 rounded mb-6">
+            <button onclick="loginAdmin()" class="bg-red-main hover:bg-red-600 text-white font-bold py-2 w-full rounded transition-colors">Login</button>
+        </div>
+
+        <div id="admin-content" class="hidden">
+            <div class="flex flex-col md:flex-row justify-between items-center bg-[#111] p-4 rounded-lg border border-red-900 mb-8">
+            <h1 class="text-2xl font-bold text-red-main">หลังบ้าน - ระบบจัดการ</h1>
+            
+            <div class="mt-4 md:mt-0 flex items-center space-x-4">
+                <span class="text-gray-400">สถานะร้านวันนี้:</span>
+                <select id="admin-status" class="px-3 py-1 rounded bg-[#222]">
+                    <option value="Open">เปิดรับคิวปกติ</option>
+                    <option value="Closed">ปิดร้าน / คิวเต็ม</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left: Settings -->
+            <div class="lg:col-span-1 border border-gray-800 bg-[#111] rounded-lg p-6 h-fit">
+                <h2 class="text-xl font-bold mb-4 border-b border-gray-800 pb-2">ระบบกำหนดวันหยุด</h2>
+                <p class="text-gray-400 text-sm mb-4">เพิ่มวันที่ไม่ให้ลูกค้าจองคิว เช่น วันหยุดพิเศษของร้าน</p>
+                
+                <form id="holiday-form" class="flex space-x-2 mb-6">
+                    <input type="date" id="h-date" required class="flex-grow rounded px-2 py-1">
+                    <button type="submit" class="bg-red-main hover:bg-red-600 px-4 py-1 rounded font-bold">เพิ่ม</button>
+                </form>
+
+                <h3 class="font-bold mb-2">วันหยุดที่ตั้งไว้แล้ว</h3>
+                <div id="holidays-list" class="space-y-2 mb-8 font-mono text-sm">
+                    <!-- Holidays list -->
+                </div>
+
+                <div class="pt-6 border-t border-gray-800">
+                    <h2 class="text-xl font-bold mb-4 border-b border-gray-800 pb-2">ช่องทางสื่อสารบนเว็บ</h2>
+                    <form id="social-config-form" class="space-y-3">
+                        <input type="url" id="social-line" placeholder="ลิงก์ LINE (เช่น https://line.me/ti/p/...)" class="w-full rounded px-3 py-2 text-sm bg-gray-900 border border-gray-800 focus:border-red-500 outline-none transition-colors">
+                        <input type="url" id="social-fb" placeholder="ลิงก์ Facebook Page" class="w-full rounded px-3 py-2 text-sm bg-gray-900 border border-gray-800 focus:border-red-500 outline-none transition-colors">
+                        <input type="url" id="social-youtube" placeholder="ลิงก์ YouTube Channel" class="w-full rounded px-3 py-2 text-sm bg-gray-900 border border-gray-800 focus:border-red-500 outline-none transition-colors">
+                        <input type="text" id="social-phone" placeholder="เบอร์โทรศัพท์ร้าน" class="w-full rounded px-3 py-2 text-sm bg-gray-900 border border-gray-800 focus:border-red-500 outline-none transition-colors">
+                        <button type="submit" class="bg-red-main hover:bg-red-600 w-full py-2 rounded font-bold text-sm">บันทึกสื่อสาร</button>
+                    </form>
+                </div>
+
+                <div class="pt-6 border-t border-gray-800 mt-6">
+                    <h2 class="text-xl font-bold mb-4 border-b border-gray-800 pb-2">สาขา & แผนที่ Google Map</h2>
+                    <form id="branch-config-form" class="space-y-4">
+                        <div class="bg-gray-900 p-3 rounded">
+                            <label class="text-xs font-bold text-red-500">สาขาที่ 1 (ล้อ ยาง)</label>
+                            <input type="text" id="branch-1-name" placeholder="ชื่อสาขา" class="w-full rounded px-3 py-1 text-sm bg-[#111] mb-2 border border-gray-800 outline-none">
+                            <input type="url" id="branch-1-map" placeholder="ลิงก์นำทาง Google Maps" class="w-full rounded px-3 py-1 text-sm bg-[#111] border border-gray-800 outline-none">
+                        </div>
+                        <div class="bg-gray-900 p-3 rounded">
+                            <label class="text-xs font-bold text-red-500">สาขาที่ 2 (จัดทรงช่วงล่าง โช้คอัพ ซ่อมเซอร์วิส)</label>
+                            <input type="text" id="branch-2-name" placeholder="ชื่อสาขา" class="w-full rounded px-3 py-1 text-sm bg-[#111] mb-2 border border-gray-800 outline-none">
+                            <input type="url" id="branch-2-map" placeholder="ลิงก์นำทาง Google Maps" class="w-full rounded px-3 py-1 text-sm bg-[#111] border border-gray-800 outline-none">
+                        </div>
+                        <button type="submit" class="bg-red-main hover:bg-red-600 w-full py-2 rounded font-bold text-sm">บันทึกแผนที่</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right: Bookings list -->
+            <div class="lg:col-span-2 border border-gray-800 bg-[#111] rounded-lg p-6">
+                <h2 class="text-xl font-bold mb-4 border-b border-gray-800 pb-2">รายชื่อคิวจองที่เข้ามา</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-[#222] text-gray-400">
+                            <tr>
+                                <th class="py-2 px-3 rounded-tl">Ref</th>
+                                <th class="py-2 px-3">ลูกค้า</th>
+                                <th class="py-2 px-3">ข้อมูลรถ / สาขา</th>
+                                <th class="py-2 px-3">งานที่ทำ / เวลา</th>
+                                <th class="py-2 px-3 rounded-tr">สถานะ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-tbody">
+                            <!-- bookings injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- End of grid -->
+        </div> <!-- End of admin-content -->
+        
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
