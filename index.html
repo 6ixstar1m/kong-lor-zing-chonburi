@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ก้องล้อซิ่ง ชลบุรี</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-main text-white">
+    <header id="global-header"></header>
+
+    <main>
+        <section class="py-16 px-4 max-w-4xl mx-auto text-center">
+            <div id="shop-status" class="inline-block bg-[#111] px-6 py-2 rounded-full border border-red-900 mb-8">
+                <!-- Status injected here -->
+            </div>
+
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                แต่งรถจบที่เดียว <br>
+                <span class="text-red-main">ก้องล้อซิ่ง ชลบุรี</span>
+            </h1>
+            <p class="text-gray-400 mb-8 text-lg">
+                แม็กซ์ ยาง โช๊คอัพ ช่วงล่าง บริการแบบเป็นกันเอง คุยง่าย ไม่จุกจิก
+            </p>
+            <a href="booking.html" class="btn-primary inline-block text-xl">จองคิวแต่งรถคลิกเลย</a>
+
+            <div id="home-holidays"></div>
+        </section>
+
+        <!-- Daily Schedule -->
+        <section class="py-12 bg-main">
+            <div class="container mx-auto px-4 max-w-4xl text-center">
+                <h2 class="text-2xl font-bold mb-4 text-red-main">📅 ตารางคิวประจำวัน</h2>
+                <div class="mb-6 inline-block bg-[#111] p-4 rounded-lg w-full md:w-auto border border-red-900/50 relative z-10">
+                    <label class="font-bold mr-3 text-gray-300">ระบุวันที่ต้องการดูคิว:</label>
+                    <input type="date" id="home-date-picker" class="bg-gray-800 text-white px-4 py-2 rounded outline-none border border-gray-700">
+                </div>
+                <div id="home-daily-queue" class="bg-[#151515] rounded-xl border border-gray-800 overflow-hidden text-left shadow-2xl relative z-10">
+                    <!-- Dynamic queue -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section class="py-12 bg-[#111] border-y border-red-900">
+            <div class="container mx-auto px-4 max-w-5xl">
+                <h2 class="text-3xl font-bold text-center mb-10 text-red-main">บริการของเรา</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-[#151515] p-8 border hover:border-red-500 border-gray-800 rounded-lg text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_15px_rgba(230,0,0,0.3)]">
+                        <div class="text-5xl mb-4">🛞</div>
+                        <h3 class="text-xl font-bold mb-2">ล้อแม็ก & ยาง</h3>
+                        <p class="text-gray-400 text-sm">(มือหนึ่ง–มือสอง)</p>
+                    </div>
+                    <div class="bg-[#151515] p-8 border hover:border-red-500 border-gray-800 rounded-lg text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_15px_rgba(230,0,0,0.3)]">
+                        <div class="text-5xl mb-4">🔧</div>
+                        <h3 class="text-xl font-bold mb-2 text-white">ซ่อมโช้คจัดทรง</h3>
+                        <p class="text-gray-400 text-sm">ย้ายแหนบ ซ่อมช่วงล่าง</p>
+                    </div>
+                    <div class="bg-[#151515] p-8 border hover:border-red-500 border-gray-800 rounded-lg text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_0_15px_rgba(230,0,0,0.3)]">
+                        <div class="text-5xl mb-4">⚙️</div>
+                        <h3 class="text-xl font-bold mb-2 text-white">เซอร์วิสเต็มระบบ</h3>
+                        <p class="text-gray-400 text-sm">ดูแลจบครบทุกปัญหา</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Contacts & Maps Section -->
+        <section id="home-extra-info" class="container mx-auto px-4 py-16 max-w-5xl">
+            <!-- Injected via JS -->
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
