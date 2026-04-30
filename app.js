@@ -2,6 +2,26 @@
 
 const STORE_KEY = 'kongLorZingDB';
 
+// -------------------------------------------------------------
+// 🔥 ตั้งค่า Firebase Database เพื่อให้ข้อมูลออนไลน์เชื่อมกันทุกเครื่อง 🔥
+// นำ Config จาก Firebase มาใส่ในนี้ สมัครฟรีที่ https://firebase.google.com
+// -------------------------------------------------------------
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+
+let useFirebase = false;
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "") {
+  firebase.initializeApp(firebaseConfig);
+  useFirebase = true;
+}
+
 const AppStore = {
   db: {
     shopStatus: 'Open',
@@ -9,7 +29,34 @@ const AppStore = {
     bookings: []
   },
 
-  init() {
+  async init() {
+    if (useFirebase) {
+      try {
+        const snapshot = await firebase.database().ref('konglorzing').get();
+        if (snapshot.exists()) {
+          const parsed = snapshot.val();
+          if (!parsed.socialMedia) parsed.socialMedia = { line: '', facebook: '', phone: '', youtube: '' };
+          if (!parsed.branches) parsed.branches = [
+            { name: 'สาขา 1 (ล้อ ยาง)', mapLink: '' },
+            { name: 'สาขา 2 (จัดทรงช่วงล่าง โช้คอัพ ซ่อมเซอร์วิส)', mapLink: '' }
+          ];
+          if (!parsed.bookings) parsed.bookings = [];
+          if (!parsed.holidays) parsed.holidays = [];
+          this.db = parsed;
+        } else {
+          this.loadLocal(); // Load existing local data into firebase
+          await firebase.database().ref('konglorzing').set(this.db);
+        }
+      } catch (e) {
+        console.error("Firebase error", e);
+        this.loadLocal();
+      }
+    } else {
+      this.loadLocal();
+    }
+  },
+
+  loadLocal() {
     const data = localStorage.getItem(STORE_KEY);
     if (data) {
       const parsed = JSON.parse(data);
@@ -18,14 +65,23 @@ const AppStore = {
         { name: 'สาขา 1 (ล้อ ยาง)', mapLink: '' },
         { name: 'สาขา 2 (จัดทรงช่วงล่าง โช้คอัพ ซ่อมเซอร์วิส)', mapLink: '' }
       ];
+      if (!parsed.bookings) parsed.bookings = [];
+      if (!parsed.holidays) parsed.holidays = [];
       this.db = parsed;
     } else {
-      this.save();
+      this.saveLocalProps();
     }
   },
 
-  save() {
+  saveLocalProps() {
     localStorage.setItem(STORE_KEY, JSON.stringify(this.db));
+  },
+
+  save() {
+    if (useFirebase) {
+      firebase.database().ref('konglorzing').set(this.db);
+    }
+    this.saveLocalProps();
   },
 
   getShopStatus() { 
@@ -148,9 +204,9 @@ function renderHeader() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   renderLoader();
-  AppStore.init();
+  await AppStore.init();
   renderHeader();
 
   const path = window.location.pathname;
